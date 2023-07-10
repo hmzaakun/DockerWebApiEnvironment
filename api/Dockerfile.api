@@ -1,0 +1,30 @@
+# Installer les dépendances
+FROM node:14-alpine as dependencies
+
+WORKDIR /app/api
+
+COPY package*.json ./
+RUN npm install
+
+# Construire l'application
+FROM dependencies as builder
+
+WORKDIR /app/api
+
+COPY . .
+
+RUN npm run build
+
+# Exécuter l'application
+FROM node:14-alpine
+
+WORKDIR /app/api
+
+COPY --from=builder /app/api/dist ./dist
+COPY package*.json ./
+
+RUN npm install
+
+EXPOSE 3000
+
+CMD ["node", "dist/server.js"]
