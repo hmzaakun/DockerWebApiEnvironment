@@ -1,0 +1,39 @@
+# Fichiers générés par le système d'exploitation
+.DS_Store
+
+# Dossier node_modules dans le dossier /api
+/api/node_modules/
+
+# Fichiers de logs
+*.log
+
+# Fichiers d'environnement
+.env
+
+# Dossiers spécifiques à certains éditeurs de code
+.vscode/
+.idea/
+
+# Fichiers de build ou de compilation
+/dist/
+/out/
+/build/
+
+# Dépendances de développement spécifiques à certains langages
+# (ajoutez les extensions de fichiers correspondantes si nécessaire)
+*.exe
+*.dll
+*.so
+*.dylib
+
+# Cache et fichiers temporaires
+.cache/
+*.swp
+*.tmp
+
+# Fichiers de sauvegarde
+*.bak
+*.backup
+*.old
+
+# Autres fichiers ou dossiers à ignorer (ajoutez les vôtres ici)

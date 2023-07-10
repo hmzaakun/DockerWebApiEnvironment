@@ -1,0 +1,34 @@
+version: '3'
+services:
+  mongodb:
+    build:
+      context: ./database
+      dockerfile: Dockerfile.mongodb
+    networks:
+      - app-network
+
+  api:
+    build:
+      context: ./api
+      dockerfile: Dockerfile.api
+    ports:
+      - 3000:3000
+    networks:
+      - app-network
+    depends_on:
+      - mongodb
+
+  web:
+    build:
+      context: ./web
+      dockerfile: Dockerfile.web
+    ports:
+      - 80:80
+    networks:
+      - app-network
+    depends_on:
+      - api
+
+networks:
+  app-network:
+    driver: bridge
