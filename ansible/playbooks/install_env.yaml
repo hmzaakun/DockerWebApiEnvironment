@@ -1,0 +1,40 @@
+---
+- name: Installation de l'environnement de développement
+  hosts: localhost
+  become: yes
+  vars:
+    user: "{{ ansible_user }}"
+    home_dir: "{{ lookup('env', 'HOME') }}"
+  
+  tasks:
+    - name: Mise à jour des paquets
+        apt:
+          update_cache: yes
+        become: yes
+
+    - name: Install Fish shell
+      apt:
+        name: fish
+        state: present
+
+    - name: Install Tmux
+      apt:
+        name: tmux
+        state: present
+
+    - name: Copy Fish configuration
+      template:
+        src: ../templates/fish/config.fish.j2
+        dest: "{{ home_dir }}/.config/fish/config.fish.j2"
+        mode: 0644
+      notify: Reload Fish shell
+
+    - name: Copy Tmux configuration
+      template:
+        src: ../templates/tmux/tmux.conf.j2
+        dest: "{{ home_dir }}/.tmux.conf"
+        mode: 0644
+
+  handlers:
+    - name: Reload Fish shell
+      shell: fish -c "source {{ home_dir }}/.config/fish/config.fish"

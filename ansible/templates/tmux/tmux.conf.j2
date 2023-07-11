@@ -1,0 +1,23 @@
+# Configuration du panneau de statut
+set -g status-position top
+set -g status-justify centre
+set -g status-interval 2
+set -g status-left-length 32
+set -g status-right-length 100
+set -g status-left "#[fg=green]Session: #S"
+set -g status-right "#[fg=blue]Date: %R #[default]"
+
+# Configuration des touches de raccourci
+bind-key C-a send-prefix
+bind-key r source-file ~/.tmux.conf \; display-message "Configuration reloaded."
+
+# Configuration des couleurs
+set -g window-status-style fg=black,bg=green
+set -g window-status-current-style fg=white,bg=blue
+
+# Configuration de la souris
+set -g mouse on
+
+# Autres options de configuration
+set -g default-terminal "screen-256color"
+set -g display-time 3000

@@ -1,0 +1,21 @@
+# Configuration générale
+set -g fish_greeting "Welcome -- Fish shell !"
+
+# Alias
+alias ll "ls -l"
+alias grep "grep --color=auto"
+
+# Complétion automatique
+source (brew --prefix)/share/fish/vendor_completions.d
+
+# Configuration des couleurs du terminal
+set -g fish_color_normal 007
+set -g fish_color_command 0af
+set -g fish_color_error f00
+set -g fish_color_autosuggestion 555
+
+# Configuration des options de tmux pour une intégration fluide
+if status is-interactive
+  tmux set-option -gq default-terminal "screen-256color"
+  tmux set-option -gq mouse on
+end
