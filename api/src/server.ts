@@ -8,7 +8,7 @@ const app = express();
 app.use(express.json());
 
 // Connexion à la base de données MongoDB
-mongoose.connect('mongodb://localhost:27017/mydatabase')
+mongoose.connect('mongodb://mongodb:27017/mydatabase')
   .then(() => {
     console.log('Connected to MongoDB');
   })
