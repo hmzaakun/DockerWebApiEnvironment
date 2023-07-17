@@ -7,12 +7,28 @@
       apt:
         update_cache: yes
       become: yes
+      when: ansible_pkg_mgr == 'apt'
+
+    - name: Mise à jour des paquets
+      dnf:
+        name: '*'
+        state: latest
+      become: yes
+      when: ansible_pkg_mgr == 'dnf'
 
     - name: Installation de Fish
       apt:
         name: fish
         state: present
       become: yes
+      when: ansible_pkg_mgr == 'apt'
+
+    - name: Installation de Fish
+      dnf:
+        name: fish
+        state: present
+      become: yes
+      when: ansible_pkg_mgr == 'dnf'
 
     - name: Définir Fish comme shell par défaut
       command: chsh -s /usr/bin/fish
@@ -30,6 +46,14 @@
         name: tmux
         state: present
       become: yes
+      when: ansible_pkg_mgr == 'apt'
+
+    - name: Installation de Tmux
+      dnf:
+        name: tmux
+        state: present
+      become: yes
+      when: ansible_pkg_mgr == 'dnf'
 
     - name: Configuration de Tmux
       template:
