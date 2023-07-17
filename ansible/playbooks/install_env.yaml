@@ -1,40 +1,43 @@
 ---
-- name: Installation de l'environnement de développement
+- name: Installation de l'environnement de développement Web
   hosts: localhost
   become: yes
-  vars:
-    user: "{{ ansible_user }}"
-    home_dir: "{{ lookup('env', 'HOME') }}"
-  
   tasks:
     - name: Mise à jour des paquets
-        apt:
-          update_cache: yes
-        become: yes
+      apt:
+        update_cache: yes
+      become: yes
 
-    - name: Install Fish shell
+    - name: Installation de Fish
       apt:
         name: fish
         state: present
+      become: yes
 
-    - name: Install Tmux
+    - name: Définir Fish comme shell par défaut
+      command: chsh -s /usr/bin/fish
+      become: yes
+
+    - name: Configuration de Fish
+      template:
+        src: fish_config.fish
+        dest: ~/.config/fish/config.fish
+        mode: 0644
+      become: yes
+
+    - name: Installation de Tmux
       apt:
         name: tmux
         state: present
+      become: yes
 
-    - name: Copy Fish configuration
+    - name: Configuration de Tmux
       template:
-        src: ../templates/fish/config.fish.j2
-        dest: "{{ home_dir }}/.config/fish/config.fish.j2"
+        src: tmux_config.conf
+        dest: ~/.tmux.conf
         mode: 0644
-      notify: Reload Fish shell
-
-    - name: Copy Tmux configuration
-      template:
-        src: ../templates/tmux/tmux.conf.j2
-        dest: "{{ home_dir }}/.tmux.conf"
-        mode: 0644
+      become: yes
 
   handlers:
-    - name: Reload Fish shell
-      shell: fish -c "source {{ home_dir }}/.config/fish/config.fish"
+    - name: Redémarrer le shell utilisateur
+      command: exec su -l "{{ ansible_user }}" -c fish
