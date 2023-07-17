@@ -3,65 +3,51 @@
   hosts: localhost
   become: yes
   tasks:
-    - name: Mise à jour des paquets
+    - name: Updates packages
       apt:
         update_cache: yes
       become: yes
       when: ansible_pkg_mgr == 'apt'
 
-    - name: Mise à jour des paquets
+    - name: Updates packages
       dnf:
         name: '*'
         state: latest
       become: yes
       when: ansible_pkg_mgr == 'dnf'
 
-    - name: Installation de Fish
+    - name: Fish Installation
       apt:
         name: fish
         state: present
       become: yes
       when: ansible_pkg_mgr == 'apt'
 
-    - name: Installation de Fish
+    - name: Fish Installation
       dnf:
         name: fish
         state: present
       become: yes
       when: ansible_pkg_mgr == 'dnf'
 
-    - name: Définir Fish comme shell par défaut
+    - name: Setting Fish as the default shell
       command: chsh -s /usr/bin/fish
       become: yes
 
-    - name: Configuration de Fish
-      template:
-        src: fish_config.fish
-        dest: ~/.config/fish/config.fish
-        mode: 0644
-      become: yes
-
-    - name: Installation de Tmux
+    - name: TMUX Installation
       apt:
         name: tmux
         state: present
       become: yes
       when: ansible_pkg_mgr == 'apt'
 
-    - name: Installation de Tmux
+    - name: TMUX Installation
       dnf:
         name: tmux
         state: present
       become: yes
       when: ansible_pkg_mgr == 'dnf'
 
-    - name: Configuration de Tmux
-      template:
-        src: tmux_config.conf
-        dest: ~/.tmux.conf
-        mode: 0644
-      become: yes
-
   handlers:
-    - name: Redémarrer le shell utilisateur
+    - name: Restart user shell
       command: exec su -l "{{ ansible_user }}" -c fish
