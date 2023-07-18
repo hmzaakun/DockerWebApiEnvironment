@@ -3,7 +3,6 @@ import axios from 'axios';
 
 const Vehicle = () => {
   const [vehicles, setVehicles] = useState([]);
-  const [searchId, setSearchId] = useState('');
   const [deleteId, setDeleteId] = useState('');
   const [updateId, setUpdateId] = useState('');
   const [updateName, setUpdateName] = useState('');
@@ -16,17 +15,6 @@ const Vehicle = () => {
     try {
       const response = await axios.get('http://localhost:3000/api/vehicles');
       setVehicles(response.data);
-    } catch (error) {
-      console.error(error);
-    }
-  };
-
-  // Fonction pour rechercher un véhicule par ID
-  const searchVehicleById = async () => {
-    if (searchId === '') return;
-    try {
-      const response = await axios.get(`http://localhost:3000/api/vehicles/${searchId}`);
-      setVehicles(response.data ? [response.data] : []);
     } catch (error) {
       console.error(error);
     }
@@ -66,7 +54,7 @@ const Vehicle = () => {
     e.preventDefault();
     if (newVehicleName === '' || newVehicleType === '') return;
     try {
-      await axios.post('/api/vehicles', {
+      await axios.post('http://localhost:3000/api/vehicles', {
         name: newVehicleName,
         type: newVehicleType,
       });
@@ -85,47 +73,6 @@ const Vehicle = () => {
   return (
     <div className="container mx-auto px-4 py-8">
       <h1 className="text-3xl font-semibold mb-4">Gestion des véhicules</h1>
-
-      <div className="mb-4">
-        <button
-          className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded"
-          onClick={getAllVehicles}
-        >
-          Récupérer tous les véhicules
-        </button>
-      </div>
-
-      <div className="mb-4">
-        <label className="mr-2">Rechercher par ID :</label>
-        <input
-          type="text"
-          value={searchId}
-          onChange={(e) => setSearchId(e.target.value)}
-          className="border border-gray-300 px-2 py-1 rounded"
-        />
-        <button
-          className="bg-green-500 hover:bg-green-700 text-white font-bold py-2 px-4 ml-2 rounded"
-          onClick={searchVehicleById}
-        >
-          Rechercher
-        </button>
-      </div>
-
-      <div className="mb-4">
-        <label className="mr-2">Supprimer par ID :</label>
-        <input
-          type="text"
-          value={deleteId}
-          onChange={(e) => setDeleteId(e.target.value)}
-          className="border border-gray-300 px-2 py-1 rounded"
-        />
-        <button
-          className="bg-red-500 hover:bg-red-700 text-white font-bold py-2 px-4 ml-2 rounded"
-          onClick={deleteVehicleById}
-        >
-          Supprimer
-        </button>
-      </div>
 
       <form onSubmit={updateVehicleById} className="mb-4">
         <h2 className="text-lg font-semibold mb-2">Modifier par ID :</h2>
@@ -149,12 +96,15 @@ const Vehicle = () => {
         </div>
         <div className="flex mb-4">
           <label className="mr-2">Type :</label>
-          <input
-            type="text"
+          <select
             value={updateType}
             onChange={(e) => setUpdateType(e.target.value)}
             className="border border-gray-300 px-2 py-1 rounded"
-          />
+          >
+            <option value="">Sélectionner un type</option>
+            <option value="car">Car</option>
+            <option value="motorcycle">Motorcycle</option>
+          </select>
         </div>
         <button
           type="submit"
@@ -177,12 +127,15 @@ const Vehicle = () => {
         </div>
         <div className="flex mb-4">
           <label className="mr-2">Type :</label>
-          <input
-            type="text"
+          <select
             value={newVehicleType}
             onChange={(e) => setNewVehicleType(e.target.value)}
             className="border border-gray-300 px-2 py-1 rounded"
-          />
+          >
+            <option value="">Sélectionner un type</option>
+            <option value="car">Car</option>
+            <option value="motorcycle">Motorcycle</option>
+          </select>
         </div>
         <button
           type="submit"
@@ -191,6 +144,23 @@ const Vehicle = () => {
           Ajouter
         </button>
       </form>
+
+      <h2 className="text-lg font-semibold mb-2">Supprimer par ID :</h2>
+      <div className="mb-4">
+        <label className="mr-2">ID :</label>
+        <input
+          type="text"
+          value={deleteId}
+          onChange={(e) => setDeleteId(e.target.value)}
+          className="border border-gray-300 px-2 py-1 rounded"
+        />
+        <button
+          className="bg-red-500 hover:bg-red-700 text-white font-bold py-2 px-4 ml-2 rounded"
+          onClick={deleteVehicleById}
+        >
+          Supprimer
+        </button>
+      </div>
 
       <h2 className="text-lg font-semibold mb-2">Liste des véhicules :</h2>
       {Array.isArray(vehicles) && vehicles.length > 0 ? (
@@ -205,7 +175,7 @@ const Vehicle = () => {
           <tbody>
             {vehicles.map((vehicle) => (
               <tr key={vehicle.id}>
-                <td className="border border-gray-300 px-4 py-2">{vehicle.id}</td>
+                <td className="border border-gray-300 px-4 py-2">{vehicle._id}</td>
                 <td className="border border-gray-300 px-4 py-2">{vehicle.name}</td>
                 <td className="border border-gray-300 px-4 py-2">{vehicle.type}</td>
               </tr>
